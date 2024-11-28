@@ -99,8 +99,12 @@
           </sourcecode>
         </section> 
       <section>
+        <name>Rendering of unprocessed addresses</name>
+        <t>The rendering of unprocessed addresses as specified in <xref section="2.38" sectionFormat="of" target="RFC7991"/> is adapted so that, if the &lt;country&gt; element is specified alongside &lt;postalline&gt; elements, then each element is rendered in the order provided, each on a new line, thereby affording authors full control of how the address appears.</t>
+      </section>
+      <section>
         <name>Possible future removal of the deprecated elements</name>
-        <t>Deprecation allows for the deprecated elements to be removed in a future revision to RFCXML without further warning. Any such removal should not remove the &lt;country&gt; element as it is currently possible to specify just the country and no other part of the address, and that ability is not affected by this change.</t>
+        <t>Deprecation allows for the deprecated elements to be removed in a future revision to RFCXML without further warning. Any such removal should take care to allow authors to continue to specify just the country and no other part of the address.</t>
       </section>
       <section>
         <name>Impact on existing documents</name>
