@@ -68,11 +68,11 @@
       <t>Processed addresses were introduced with the intent of providing better semantic information about addresses that could have future uses. In order to achieve that, the above set of generic elements were specified with the intent that could be used to encode any postal address. However, experience with the used of processed addresses, has shown that they come with significant problems that outweigh any potential benefits:</t>
       <ul>
         <li>Authors complain that the formatting of addresses produced by the library does not correspond to how they would format them.</li>
-        <li>Following complaints from authors that the elements do not semantically correspond to their local addresses, RFCXML was extended after the publication of <xref target="RFC7991"/> to include the &lt;cityarea&gt;, &lt;extaddr&gt;, &lt;pobox&gt; and &lt;sortingcode&gt; elements, which has just complicated matters further.</li>
+        <li>Following complaints from authors that the elements do not semantically correspond to their local addresses, RFCXML was extended after the publication of <xref target="RFC7991"/> to include the &lt;cityarea&gt;, &lt;extaddr&gt;, &lt;pobox&gt; and &lt;sortingcode&gt; elements, as documented in <xref target="I-D.levkowetz-xml2rfc-v3-implementation-notes"/>, which has just complicated matters further.</li>
         <li>The address rules encoded into the third-party are incomplete and in some cases out of date.</li>
         <li>The third-party library is no longer maintained and no alternative has been identified.</li>
       </ul>
-      <t>Further, experience though has shown that there is a value in a semantic tag for the country of an address, but the &lt;country&gt; element is only allowed within processed addresses and not within unprocessed addresses and so any unprocessed addresses are more complex to parse for country information.</t>
+      <t>Further, experience has shown that there is a value in a semantic tag for the country of an address, but the &lt;country&gt; element is only allowed within processed addresses and not within unprocessed addresses and so any unprocessed addresses are more complex to parse for country information.</t>
     </section>
     
     <section>
@@ -82,16 +82,16 @@
           <name>Changes to RFCXML</name>
           <t>This document updates the RFCXML grammar in <xref target="RFC7991"/> as follows:</t>
           <ol>
-            <li>The use of the &lt;city&gt;, &lt;code&gt;, &lt;region&gt; &lt;street&gt;, &lt;cityarea&gt;, &lt;extaddr&gt;, &lt;pobox&gt; and &lt;sortingcode&gt; within &lt;postal&gt; is deprecated. They may still be used but the the xml2rfc tool will emit a warning that their use is deprecated.</li>
-            <li>The &lt;country&gt; element can now be used optionally (zero or one times) within the &lt;postal&gt; element when &lt;postalline&gt; elements are used.</li>
+            <li>The use of the &lt;city&gt;, &lt;code&gt;, &lt;region&gt; &lt;street&gt;, &lt;cityarea&gt;, &lt;extaddr&gt;, &lt;pobox&gt; and &lt;sortingcode&gt; within &lt;postal&gt; as specified in <xref section="2.37" sectionFormat="of" target="RFC7991"/> and further extended by the addition of new elements, is deprecated. They may still be used but the the xml2rfc tool will emit a warning that their use is deprecated.</li>
+            <li>The &lt;country&gt; element can now be used optionally (zero or one times) within the &lt;postal&gt; element when &lt;postalline&gt; elements are used, as specified in <xref section="2.37" sectionFormat="of" target="RFC7991"/>.</li>
           </ol>
-          <t>This is implemented in the grammar with this line:</t>
+          <t>This is implemented in the grammar with this line changing from:</t>
           <sourcecode type="rnc">
             <![CDATA[
 | postalLine+)
             ]]>
           </sourcecode>
-          <t>changing to:</t>
+          <t>to:</t>
           <sourcecode type="rnc">
             <![CDATA[
 | (postalLine+, country?))
@@ -107,8 +107,13 @@
         <t>Deprecation allows for the deprecated elements to be removed in a future revision to RFCXML without further warning. Any such removal should take care to allow authors to continue to specify just the country and no other part of the address.</t>
       </section>
       <section>
+        <name>Grammar versions and compatibility</name>
+        <t>These changes are backwards compatible for older documents. That means that any RFCXML document that validates with the RFCXML grammar before this change, will continue to validate. The deprecation warning may lead to some choosing to update their documents, but that is not required.</t>
+        <t>These changes are not backwards compatible for older versions of the grammar. That means that documents written after this grammar is introduced that include the &lt;country&gt; element alongside &lt;postalline&gt; elements, will not validate against older versions of the grammar.</t>
+        <t>Since the publication of <xref target="RFC7991"/> there have been multiple versions of the RFCXML grammar published that have the same compatibility attributes. See <xref target="v3rnc"/> for details. None of these have been assigned a different version number (what may appear to be version numbering of the grammar is in fact a reference to the version of xml2rfc that first included this changed grammar) and so this document also does not assign the new grammar a different version number.</t>
+      </section>
+      <section>
         <name>Impact on existing documents</name>
-        <t>These changes are backwards compatible, which means that any RFCXML document that validates with the RFCXML grammar before this change, will continue to validate. The deprecation warning may lead to some choosing to update their documents, but that is not required.</t>
         <t>Nothing in this document changes the current principle of immutability of RFCs. RFCXML RFCs do not need to have any postal addresses with processed addresses rewritten as unprocessed addresses as there is no benefit in doing so. It is recognised that this will likely mean that a point is reached where the version of xm2rfc current at that time cannot reliably render processed addresses in previously published RFCs in precisely the same way as they were at the time of publication.</t>
       </section>
     </section>
@@ -136,6 +141,27 @@
       <references>
         <name>Normative References</name>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7991.xml"/>
+        <reference anchor="I-D.levkowetz-xml2rfc-v3-implementation-notes" target="https://datatracker.ietf.org/doc/html/draft-levkowetz-xml2rfc-v3-implementation-notes-13">
+          <front>
+            <title>Implementation notes for RFC7991,</title>
+            <author initials="H." surname="Levkowetz" fullname="Henrik Levkowetz">
+              <organization>Elf Tools AB</organization>
+            </author>
+            <date month="September" day="16" year="2021"/>
+            <abstract>
+              <t>
+                This memo documents issues and observations found while implementing RFC 7991. Individual notes are organised into separate sections, depending on their character.
+              </t>
+            </abstract>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-levkowetz-xml2rfc-v3-implementation-notes-13"/>
+        </reference>
+        <reference anchor="v3rnc" target="https://github.com/rfc-format/v3grammar">
+          <front>
+            <title>GitHub repository for version of the v3 RFCXML grammar</title>
+            <author/>
+          </front>
+        </reference>
       </references>
       
       <references>
